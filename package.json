@@ -16,6 +16,7 @@
   "dependencies": {
     "commander": "^3.0.2",
     "npx": "^10.2.0",
+    "typed-rest-client": "^1.5.0",
     "typescript": "^3.6.4"
   },
   "devDependencies": {
