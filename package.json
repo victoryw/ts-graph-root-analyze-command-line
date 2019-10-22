@@ -14,7 +14,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "commander": "^3.0.2",
     "npx": "^10.2.0",
     "typescript": "^3.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.2"
   }
 }
