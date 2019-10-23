@@ -39,18 +39,10 @@ export class PlsqlName {
         this.method = method;
     }
 }
-
-export interface Graph {
-    nodes: Node[];
-    edges: Edge[]
-}
+export type Graph = {nodes: Node[], edges: Edge[]}
+export type Edge = {a: string, b : string}
 
 export interface Node {
     id: string;
     title: string;
-}
-
-export interface Edge {
-    a: string;
-    b: string;
 }
