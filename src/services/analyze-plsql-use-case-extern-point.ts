@@ -8,7 +8,7 @@ class PlsqlUseCaseExternPointAnalyzor {
     this.plsqls.push(new PlsqlName("PKG_LIFE_WITHDRAW_BILL", "P_INSERT_BATCH_WITHDRAW_BILL"));
   }
 
-  async justDo(ServerUrl: string): Promise<PlSqlRoot[]> {
+  async justDo(ServerUrl: string, plsqls: PlsqlName[]): Promise<PlSqlRoot[]> {
     const deps = await Deps.fetchOfSqls(ServerUrl, this.plsqls);
     const rootH = deps.map(dep => {
       const analyzer = new GraphAnalyze(dep.Deps);

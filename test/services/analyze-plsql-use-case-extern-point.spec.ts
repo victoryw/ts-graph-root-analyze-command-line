@@ -17,7 +17,7 @@ describe('when query the analyze plsql extern point', ()=> {
             .reply(200, {nodes: [{id:'1', title:'1'}, {id:'2', title:'2'}], edges: [{a: "1", b:"2"}]});
 
         const service = new PlsqlUseCaseExternPointAnalyzor();
-        const result = await service.justDo(serverUrl);
+        const result = await service.justDo(serverUrl, [plsqlName]);
         should(result.length).be.equal(1);
         should(result[0].root.id).be.equal('1');
         should(result[0].root.title).be.equal('1');
