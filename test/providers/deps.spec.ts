@@ -7,7 +7,7 @@ describe('call api deps server to fetchOfSqls the java deps of plsql', ()=> {
     const plsqlName1 = new PlsqlName("pkg1", "method1");
     const plsqlName2 = new PlsqlName("pkg2", "method2");
 
-    before(async() => {
+    beforeEach(async() => {
         nock.disableNetConnect()
     });
 

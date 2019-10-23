@@ -1,4 +1,5 @@
-import {Deps, PlsqlName} from "../providers/deps";
+import {Deps, PlsqlName,Node} from "../providers/deps";
+import {GraphAnalyze} from "../providers/graph-analyze";
 
 class PlsqlUseCaseExternPointAnalyzor {
   plsqls: PlsqlName[] = [];
@@ -7,12 +8,21 @@ class PlsqlUseCaseExternPointAnalyzor {
     this.plsqls.push(new PlsqlName("PKG_LIFE_WITHDRAW_BILL", "P_INSERT_BATCH_WITHDRAW_BILL"));
   }
 
-  async justDo(ServerUrl: string): Promise<string[]> {
-    const dep = await Deps.fetchOfSqls(ServerUrl, this.plsqls);
-    return [];
+  async justDo(ServerUrl: string): Promise<PlSqlRoot[]> {
+    const deps = await Deps.fetchOfSqls(ServerUrl, this.plsqls);
+    const rootH = deps.map(dep => {
+      const analyzer = new GraphAnalyze(dep.Deps);
+      return analyzer.getRoots().map(root => {
+        return {root: root, plsql: dep.plSql};
+      });
+    });
+
+    return [].concat(...rootH);
+
   }
 }
 
+type PlSqlRoot = {root: Node} & { plsql: PlsqlName };
 
 export {PlsqlUseCaseExternPointAnalyzor};
 

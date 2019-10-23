@@ -40,17 +40,17 @@ export class PlsqlName {
     }
 }
 
-interface Graph {
+export interface Graph {
     nodes: Node[];
     edges: Edge[]
 }
 
-interface Node {
+export interface Node {
     id: string;
     title: string;
 }
 
-interface Edge {
-    a: String;
-    b: String;
+export interface Edge {
+    a: string;
+    b: string;
 }
