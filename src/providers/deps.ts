@@ -38,6 +38,10 @@ export class PlsqlName {
         this.pkg = pkg;
         this.method = method;
     }
+
+    toString() {
+        return `${this.pkg}.${this.method}`;
+    }
 }
 export type Graph = {nodes: Node[], edges: Edge[]}
 export type Edge = {a: string, b : string}

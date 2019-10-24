@@ -22,7 +22,7 @@ class PlsqlUseCaseExternPointAnalyzor {
   }
 }
 
-type PlSqlRoot = {root: Node} & { plsql: PlsqlName };
+export type PlSqlRoot = {root: Node} & { plsql: PlsqlName };
 
 export {PlsqlUseCaseExternPointAnalyzor};
 
