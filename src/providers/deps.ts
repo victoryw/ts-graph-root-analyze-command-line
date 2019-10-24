@@ -2,8 +2,8 @@ import * as rm from "typed-rest-client/RestClient";
 
 export class Deps {
 
-    public static async fetchOfSqls(ServerUrl: string, plsqlNames: PlsqlName[]) {
-        return await Promise.all(
+    static async fetchOfSqls(ServerUrl: string, plsqlNames: PlsqlName[]) {
+        return Promise.all(
             plsqlNames.map(
                 (plSqlName) => this.fetchSql(ServerUrl, plSqlName)));
     }
