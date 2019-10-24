@@ -11,7 +11,19 @@ describe('when translate the plsql', () => {
             }];
 
         const formattedString = exportPlsqlRoot(root);
-        const expectedString = `||plsql||method||\n||pkg.method||title||\n`;
+        const expectedString = `||plsql||method||\n|pkg.method|title|\n`;
+        should(formattedString).be.equal(expectedString);
+    });
+
+    it('should return root title as default when dep no root', ()=> {
+        const root = [
+            {
+                root: null,
+                plsql: new PlsqlName('pkg', 'method')
+            }];
+
+        const formattedString = exportPlsqlRoot(root);
+        const expectedString = `||plsql||method||\n|pkg.method||\n`;
         should(formattedString).be.equal(expectedString);
     })
 });

@@ -10,8 +10,8 @@ describe('when query the analyze plsql extern point', ()=> {
     });
 
     it('should return the roots by plsql name', async () => {
-        const plsqlName = new PlsqlName("PKG_LIFE_WITHDRAW_BILL",
-            "P_INSERT_BATCH_WITHDRAW_BILL");
+        const plsqlName = new PlsqlName("PKG1",
+            "METHOD1");
         nock(serverUrl)
             .get(`/plsql/${plsqlName.pkg}/${plsqlName.method}/callers`)
             .reply(200, {nodes: [{id:'1', title:'1'}, {id:'2', title:'2'}], edges: [{a: "1", b:"2"}]});
