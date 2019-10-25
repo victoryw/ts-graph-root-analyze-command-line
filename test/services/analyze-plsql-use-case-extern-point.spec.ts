@@ -25,6 +25,23 @@ describe('when query the analyze plsql extern point', ()=> {
         should(result[0].plsql.method).be.equal(plsqlName.method);
     });
 
+    it('should return empty when the plsql no deps', async() => {
+        const plsqlName = new PlsqlName("PKG1",
+            "METHOD1");
+        nock(serverUrl)
+            .get(`/plsql/${plsqlName.pkg}/${plsqlName.method}/callers`)
+            .reply(200, {nodes: [], edges: []});
+
+        const service = new PlsqlUseCaseExternPointAnalyzor();
+        const result = await service.justDo(serverUrl, [plsqlName]);
+
+        should(result.length).be.equal(1);
+        should(result[0].plsql.pkg).be.equal("PKG1");
+        should(result[0].plsql.method).be.equal("METHOD1");
+        should(result[0].root).be.equal(null);
+
+    })
+
     afterEach(async () => {
         nock.cleanAll();
         nock.enableNetConnect();

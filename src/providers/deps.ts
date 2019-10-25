@@ -1,4 +1,5 @@
 import * as rm from "typed-rest-client/RestClient";
+import {oc} from "ts-optchain";
 
 export class Deps {
 
@@ -42,7 +43,12 @@ export class PlsqlName {
         return `${this.pkg}.${this.method}`;
     }
 }
-export interface Graph {nodes: Node[]; edges: Edge[]; }
+export class Graph {
+    nodes: Node[];
+    edges: Edge[];
+}
+export const isEmptyEdge = (edges: Edge[]) => oc(edges).length(0) === 0;
+
 export interface Edge {a: string; b: string; }
 
 export interface Node {
