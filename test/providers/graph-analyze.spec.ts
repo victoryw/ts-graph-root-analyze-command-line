@@ -17,8 +17,8 @@ describe('when analyze graph', () => {
         node3 = new NodeInTest('3', '3');
         edge1 = {a: node1.id, b: node2.id};
         edge2 = {a: node3.id, b: node2.id};
-        graph1 = {nodes: [node1, node2], edges: [edge1]};
-        graph2 = {nodes: [node1, node2, node3], edges:[edge1, edge2]};
+        graph1 = new Graph([node1, node2], [edge1]);
+        graph2 = new Graph([node1, node2, node3], [edge1, edge2]);
     });
 
     it('should get the root', () => {

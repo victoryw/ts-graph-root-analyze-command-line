@@ -12,14 +12,15 @@ class PlsqlUseCaseExternPointAnalyzor {
         assert.strictEqual(keys.length, adjustPlsqls.length);
     }
 
-    public async justDo(ServerUrl: string, plsqls: PlsqlName[]): Promise<PlSqlRoot[]> {
-
+    public async justDo(ServerUrl: string, plsqls: PlsqlName[], filterJavaMethodNames?: string[]): Promise<PlSqlRoot[]> {
         const adjustPlSqls = _.uniqBy(plsqls, (item) => item.toString());
         const deps = await Deps.fetchOfSqls(ServerUrl, adjustPlSqls);
 
         const isSuccess = (dep) => dep.isSuccess && !isEmptyEdge(dep.Deps.edges);
         const apiSuccessDeps = deps.filter(isSuccess);
         const acpiFailureDeps = deps.filter((dep) => !isSuccess(dep));
+
+        const filterName = filterJavaMethodNames ? filterJavaMethodNames:[];
         const rootH = apiSuccessDeps.map((dep) => {
             const analyzer = new GraphAnalyze(dep.Deps);
             return analyzer.getRoots().map((root) => {

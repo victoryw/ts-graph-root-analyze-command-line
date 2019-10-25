@@ -43,13 +43,47 @@ export class PlsqlName {
         return `${this.pkg}.${this.method}`;
     }
 }
+
 export class Graph {
     nodes: Node[];
     edges: Edge[];
+
+
+    constructor(nodes: Node[], edges: Edge[]) {
+        this.nodes = nodes;
+        this.edges = edges;
+    }
+
+    ignoreNonSupportNode(titles: string[]) {
+        if (this.nodes) {
+            this.nodes = this.nodes.filter(node => {
+                return titles.some(title => {
+                    return title === node.title
+                })
+            })
+        }
+    }
 }
+
 export const isEmptyEdge = (edges: Edge[]) => oc(edges).length(0) === 0;
 
-export interface Edge {a: string; b: string; }
+export interface Edge {
+    a: string;
+    b: string;
+}
+
+
+export const getClass: (node: Node) => string = (node: Node) => {
+    return node.title.split('.').filter((element, index, array) => {
+        return array.length !== index + 1;
+    }).join('.')
+};
+
+export const getMethod = (node: Node) => {
+    const strings = node.title.split('.');
+    return strings[strings.length - 1];
+};
+
 
 export interface Node {
     id: string;
