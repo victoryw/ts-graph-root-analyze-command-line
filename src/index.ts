@@ -1,44 +1,19 @@
 #!/usr/bin/env ts-node
 
-import * as program from 'commander'
-import { PlsqlUseCaseExternPointAnalyzor } from './services/analyze-plsql-use-case-extern-point'
-import {PlsqlName} from "./providers/deps";
+import * as program from "commander";
 import {exportPlsqlRoot} from "./exporters/export-plsql-root";
+import {PlsqlName} from "./providers/deps";
+import {PlSqlRoot, PlsqlUseCaseExternPointAnalyzor} from "./services/analyze-plsql-use-case-extern-point";
 
-program.command('analyze').
-  option('-l, --url <dependency service root>', 'dependency service root').
+program.command("analyze").
+  option("-l, --url <dependency service root>", "dependency service root").
+  option("-vl, --visualUrl <dependency visual root>", "dependency visual root").
   action(async (options: AnalyzeOption) => {
     const service = new PlsqlUseCaseExternPointAnalyzor();
-    const plsqls = [new PlsqlName('PKG_FI_ARAP_OFFSET','P_CANCEL_PREOFFSET'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INSERT_BATCH_WITHDRAW_BILL'),
-      new PlsqlName('PKG_PAYMENT_DISTRIBUTE','P_WITHDRAW_BILL'),
-      new PlsqlName('PKG_LIFE_NEWBIZ_APPRO_INC','P_APPROVAL_INSERT_SEND_BACK'),
-      new PlsqlName('PKG_LIFE_PAY_PUB','P_WITHDRAW_BILL'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_WD_BILL_CLAIM'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_WD_BILL_CLAIM'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_BILL_NEW_INSPECT'),
-      new PlsqlName('PKG_LIFE_NEWBIZ_APPRO_GRP_INC','P_APPROVAL_RETURN_FEE_TRANSFER'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INSERT_WITHDRAW_BILL_BAT_ID'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INSERT_WITHDRAW_BILL_BAT'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_WD_BILL_4_INSPECT'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_BILL_NEW_INSPECT'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_WD_INS_BILL'),
-      new PlsqlName('PKG_LIFE_CLAIM_INSPECT','P_DEAL_INS_BILL_NO_CLMINFO'),
-      new PlsqlName('PKG_LIFE_CLAIM_INSPECT','P_DEAL_INS_BILL_NO_CLMINFO'),
-      new PlsqlName('PKG_PAYMENT_PUB_INCOME','P_CREATE_WITHDRAW_BILL'),
-      new PlsqlName('PKG_LIFE_PS_ROLLBACK_INCOME','P_CANCEL_FEE'),
-      new PlsqlName('PKG_LIFE_NEWBIZ_APPRO_GRP_INC','P_APPROVAL_INSERT_OVER_MANAGE'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_WD_BILL_4_INSPECT'),
-      new PlsqlName('PKG_LIFE_CLAIM_BATCH','P_INSERT_BATCH_WITHDRAW_BILL'),
-      new PlsqlName('PKG_LIFE_WITHDRAW_BILL','P_INS_OR_UPD_WD_INS_BILL'),
-      new PlsqlName('PKG_LIFE_CLAIM_ADVANCE_PAY','P_SAVE_ADVANCE_PAY'),
-      new PlsqlName('PKG_LIFE_CUSTOMER_MERGE','P_CUSTOMER_MERGE'),
-      new PlsqlName('PKG_LIFE_CLAIM_STD','P_VOTE_CLOSED_BATCH'),
-      new PlsqlName('PKG_LIFE_NEWBIZ_SPECIAL_OPT','RETURNCARDPOLICYCASH'),
-      new PlsqlName('PKG_LIFE_CLAIM_STD','P_VOTE_CLOSED_CASE'),
-      new PlsqlName('PKG_FI_REFUND_PUB','P_CREATE_WITHDRAW_BILL'),
-      new PlsqlName('PKG_LIFE_PAY_ONTIME','P_ONTIME_GENERATE_INSTALMENT')];
-    const result = exportPlsqlRoot(await service.justDo(options.url, plsqls));
+    const plsqls = [];
+  const roots = await service.justDo(options.url, plsqls);
+  const result = exportPlsqlRoot(attachToUrl(options.visualUrl,roots));
+
     console.log(result);
   });
 
@@ -46,4 +21,22 @@ program.parse(process.argv);
 
 class AnalyzeOption {
   public url: string;
+  public visualUrl: string;
 }
+export type RootWithUrl = PlSqlRoot & {visual: {plsql:string;root:string}}
+
+function attachToUrl(visualUrl: string, plsqlRoots: PlSqlRoot[]):RootWithUrl[] {
+  return plsqlRoots.map(root => {
+    return {
+      plsql: root.plsql,
+      root: root.root,
+      visual: {
+        plsql:  `${visualUrl}/plsql/${root.plsql.pkg}/${root.plsql.method}`,
+        root: root.root ?
+            `${visualUrl}/plsql/${root.plsql.pkg}/${root.plsql.method}` :
+            ''
+      }
+    }
+  });
+}
+
